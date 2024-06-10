@@ -2,6 +2,8 @@ YouTube の支払履歴データを見やすく表示するツール
 
 [この Gist ](https://gist.github.com/RYLSnmm/155b661e9ade08bdc54c5317de8c8ea6)をもう少し便利にしたもの
 
+![](img.png)
+
 # データ
 
 使うデータは JSON で入力する  

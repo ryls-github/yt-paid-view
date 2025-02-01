@@ -5,18 +5,31 @@ const data = $$("yt-activity-item-renderer").map(e => {
 	return { day, channel, yen }
 })
 
+const parseDate = (str) => {
+	// 同じ年なら「1月2日」形式
+	// 過去の年なら「2024/01/02」形式
+	{
+		const matched = str.match(/^(\d+)月(\d+)日$/)
+		if (matched) {
+			return [
+				new Date().getFullYear(),
+				String(matched[1]).padStart(2, "0"),
+				String(matched[2]).padStart(2, "0"),
+			].join("/")
+		}
+	}
+	{
+		const matched = str.match(/^\d{4}\/\d{2}\/\d{2}$/)
+		if (matched) {
+			return str
+		}
+	}
+	throw new Error("不正な日付です")
+}
+
 for (const [index, item] of data.entries()) {
 	if (item.day) {
-		// 読み取ったものは「4月30日」形式なので
-		// 今の年をくっつけて 2024/04/30 形式にする
-		const matched = item.day.match(/^(\d+)月(\d+)日$/)
-		if (!matched) throw new Error("不正な日付です")
-		const day = [
-			new Date().getFullYear(),
-			String(matched[1]).padStart(2, "0"),
-			String(matched[2]).padStart(2, "0"),
-		].join("/")
-		item.day = day
+		item.day = parseDate(item.day)
 	} else {
 		// 連続して同じ日だと省略されるので一つ上をコピーする
 		item.day = data[index - 1].day
